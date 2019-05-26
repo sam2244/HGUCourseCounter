@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Student {
-	private int count;
+	//private int count;
 	private String studentId;
 	private ArrayList<Course> coursesTaken; // List of courses student has taken
 	private HashMap<String,Integer> semestersByYearAndSemester; //key: Year-Semester
@@ -21,15 +21,14 @@ public class Student {
 	}
 	
 	public HashMap<String, Integer> getSemestersByYearAndSemester() {
-	      for(String line: getyear + "-"+ getsemester) {
-		         String data = new String(line);
-		         Integer info = new Integer(data.getStudentId());
-		         
-		         if(semestersByYearAndSemester.containsKey(info.getStudentId())) {
-		        	 semestersByYearAndSemester.get(info.getStudentId()).addCourse(data);
+	      for(String line: semestersByYearAndSemester) {
+		      String year = Course.getyearTaken();
+		      Integer semester = Course.getSemesterCourseTaken();
+		         if(semestersByYearAndSemester.containsKey(year)) {
+		        	 semestersByYearAndSemester.get(year).addCourse(semester);
 		         }else {
-		            info.addCourse(data);
-		            semestersByYearAndSemester.put(info.getStudentId(),info);
+		           	Integer sem = new semester;
+		            semestersByYearAndSemester.put(year,sem);
 		         }
 		      }
 		
