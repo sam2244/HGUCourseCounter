@@ -7,10 +7,10 @@ import java.util.TreeMap;
 
 import edu.handong.analysis.datamodel.Course;
 import edu.handong.analysis.datamodel.Student;
-import edu.handong.analysise.utils.NotEnoughArgumentException;
-import edu.handong.analysise.utils.Utils;
+import edu.handong.analysis.utils.NotEnoughArgumentException;
+import edu.handong.analysis.utils.Utils;
 
-public class HGUCoursePatternAnalyzer {
+public class HGUCoursePatternAnalyzer extends Exception{
 
 	private HashMap<String,Student> students;
 	
@@ -53,10 +53,22 @@ public class HGUCoursePatternAnalyzer {
 	 * @return
 	 */
 	private HashMap<String,Student> loadStudentCourseRecords(ArrayList<String> lines) {
-		// TODO: Implement this method
-		
-		return students; // do not forget to return a proper variable.
-	}
+	      HashMap<String, Student> HashMapOut = new HashMap<String, Student>();
+	      
+	      for(String line:lines) {
+	         Course data = new Course(line);
+	         Student info = new Student(data.getStudentId());
+	         
+	         if(HashMapOut.containsKey(info.getStudentId())) {
+	        	 HashMapOut.get(info.getStudentId()).addCourse(data);
+	         }else {
+	            info.addCourse(data);
+	            HashMapOut.put(info.getStudentId(),info);
+	         }
+	      }
+	      
+	      return HashMapOut;
+	   }
 
 	/**
 	 * This method generate the number of courses taken by a student in each semester. The result file look like this:
@@ -72,9 +84,8 @@ public class HGUCoursePatternAnalyzer {
 	 * @return
 	 */
 	private ArrayList<String> countNumberOfCoursesTakenInEachSemester(Map<String, Student> sortedStudents) {
+		ArrayList<String> counter = new ArrayList<String>();
 		
-		// TODO: Implement this method
-		
-		return null; // do not forget to return a proper variable.
+		return counter;
 	}
 }

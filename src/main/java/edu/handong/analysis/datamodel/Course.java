@@ -12,15 +12,15 @@ public class Course {
 	private int semesterCourseTaken;
 	
 	public Course(String line) {
-		studentId=line.split(",")[0];
-		yearMonthGraduated=line.split(",")[1];
-		firstMajor=line.split(",")[2];
-		secondMajor=line.split(",")[3];
-		courseCode=line.split(",")[4];
-		courseName=line.split(",")[5];
-		courseCredit=line.split(",")[6];
-		yearTaken=Integer.parseInt(line.split(",")[7]);
-		semesterCourseTaken=Integer.parseInt(line.split(",")[8]);
+		studentId=line.split(",")[0].trim();
+		yearMonthGraduated=line.split(",")[1].trim();
+		firstMajor=line.split(",")[2].trim();
+		secondMajor=line.split(",")[3].trim();
+		courseCode=line.split(",")[4].trim();
+		courseName=line.split(",")[5].trim();
+		courseCredit=line.split(",")[6].trim();
+		yearTaken=Integer.parseInt(line.split(",")[7].trim());
+		semesterCourseTaken=Integer.parseInt(line.split(",")[8].trim());
 	}
 
 	public String getStudentId() {
