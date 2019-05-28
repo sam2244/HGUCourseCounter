@@ -35,13 +35,13 @@ public class HGUCoursePatternAnalyzer extends Exception{
 		ArrayList<String> lines = Utils.getLines(dataPath, true);
 		
 		students = loadStudentCourseRecords(lines);
-		
+		//System.out.println(students.get("2").getStudentId());
 		// To sort HashMap entries by key values so that we can save the results by student ids in ascending order.
 		Map<String, Student> sortedStudents = new TreeMap<String,Student>(students); 
-		
+		//System.out.println(sortedStudents.get("2").getStudentId());
 		// Generate result lines to be saved.
 		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
-		
+		//System.out.println(linesToBeSaved.get(15));
 		// Write a file (named like the value of resultPath) with linesTobeSaved.
 		Utils.writeAFile(linesToBeSaved, resultPath);
 	}
@@ -84,8 +84,28 @@ public class HGUCoursePatternAnalyzer extends Exception{
 	 * @return
 	 */
 	private ArrayList<String> countNumberOfCoursesTakenInEachSemester(Map<String, Student> sortedStudents) {
-		ArrayList<String> counter = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<String>();
 		
-		return counter;
+		for(String key: sortedStudents.keySet()) {
+			sortedStudents.get(key).getSemestersByYearAndSemester();
+		}
+		result.add("StudentID, TotalNumberOfSemestersRegistered, Semester, NumCoursesTakenInTheSemester");
+		
+		String line = null;
+		for(String key:sortedStudents.keySet()) {
+			//System.out.println(sortedStudents.get(key).getStudentId());
+			for(String list:sortedStudents.get(key).getSortedSemesterByYearAndSemester().keySet()) {
+				String ID = sortedStudents.get(key).getStudentId();
+				String TotalSem = String.valueOf(sortedStudents.get(key).getTotalNumberOfSemesterRegistered());
+				int Sem = sortedStudents.get(key).getSemestersByYearAndSemester().get(list);
+				int Num = sortedStudents.get(key).getNumCourseInNthSementer(Sem);
+				
+				line = ID + "," + TotalSem + "," + Sem + "," + Num;
+				
+				result.add(line);
+			}
+		}
+
+		return result;
 	}
 }

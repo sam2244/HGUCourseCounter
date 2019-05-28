@@ -2,9 +2,12 @@ package edu.handong.analysis.datamodel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Student {
-	//private int count;
+	private Integer count=1; //counting for total semester
 	private String studentId;
 	private ArrayList<Course> coursesTaken; // List of courses student has taken
 	private HashMap<String,Integer> semestersByYearAndSemester; //key: Year-Semester
@@ -21,25 +24,46 @@ public class Student {
 	}
 	
 	public HashMap<String, Integer> getSemestersByYearAndSemester() {
-	      for(String line: semestersByYearAndSemester) {
-		      String year = Course.getyearTaken();
-		      Integer semester = Course.getSemesterCourseTaken();
-		         if(semestersByYearAndSemester.containsKey(year)) {
-		        	 semestersByYearAndSemester.get(year).addCourse(semester);
-		         }else {
-		           	Integer sem = new semester;
-		            semestersByYearAndSemester.put(year,sem);
-		         }
-		      }
-		
+		/*Iterator studentIter = semestersByYearAndSemester.keySet().iterator();*/
+		//int count = 0;
+	    for(Course data:coursesTaken){
+	    	String key = (data.getYearTaken() + "-" + data.getSemesterCourseTaken());
+
+		    if(semestersByYearAndSemester.containsKey(key)) {
+		    }else {
+		    	semestersByYearAndSemester.put(key, count++);
+		    }
+		}
 		return semestersByYearAndSemester;
 	}
 	
 	public int getNumCourseInNthSementer(int semester) {
-		semester = 0;
-		for()
+		int count=0;
 		
-		return semester;
+		for(String key:semestersByYearAndSemester.keySet()) {
+			if(semester==semestersByYearAndSemester.get(key)) {
+				String[] splitYearSemester = (key.split("-"));
+				int year = Integer.parseInt(splitYearSemester[0].trim());
+				int semesterOfYear = Integer.parseInt(splitYearSemester[1].trim());
+				
+				for(Course course:coursesTaken) {
+					if(course.getYearTaken() == year && course.getSemesterCourseTaken() == semesterOfYear) {
+						count++;
+						}
+					}
+				}
+			}
+		return count;
+	}
+	
+	public Map<String, Integer> getSortedSemesterByYearAndSemester(){
+		Map<String, Integer> sortedSemesterByYearAndSemester = new TreeMap<String, Integer>(semestersByYearAndSemester); 
+	return sortedSemesterByYearAndSemester;
+	}
+	
+	public Integer getTotalNumberOfSemesterRegistered() {
+		//String num = Integer.parseInt(count);
+		return count-1;
 	}
 
 	public String getStudentId() {
