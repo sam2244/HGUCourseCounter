@@ -21,12 +21,19 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class HGUCoursePatternAnalyzer extends Exception{
+	
+	private static final HashMap<String, Student> NULL = null;
+
+	String courseName;
 	
 	String input;
 	String output;
@@ -78,51 +85,39 @@ public class HGUCoursePatternAnalyzer extends Exception{
 		// To sort HashMap entries by key values so that we can save the results by student ids in ascending order.
 		Map<String, Student> sortedStudents = new TreeMap<String,Student>(students); 
 		
-		//System.out.println(sortedStudents.get("2").getStudentId());
-		// Generate result lines to be saved.
-		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
-		
 		HashMap<String, Integer> totalStudents = new HashMap<String, Integer>();
-		totalStudents = getTotalStudents(students);
+		totalStudents = getTotalStudents(sortedStudents);
 		
 		HashMap<String, Integer> CourseTakenStudents = new HashMap<String, Integer>();
-		CourseTakenStudents = getCourseTakenStudents(students);
+		CourseTakenStudents = getCourseTakenStudents(sortedStudents);
 		
-		ArrayList<String> Rate = new ArrayList<String>();
-		Rate = RateOfCourse(students);
+		//ArrayList<String> Rate = new ArrayList<String>();
+		ArrayList<String> Rate = RateOfCourse(students);
 		
-		//System.out.println(linesToBeSaved.get(15));
-		// Write a file (named like the value of resultPath) with linesTobeSaved.
+		//System.out.println(sortedStudents.get("2").getStudentId());
+		// Generate result lines to be saved.
+		ArrayList<String> linesToBeSaved = new ArrayList<String>();
 		
 		if (analysis.equals("1")) {
+			linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
+		}
+		
+		if (analysis.equals("2")) {
+			linesToBeSaved = RateOfCourse(sortedStudents);
+		}
+		//System.out.println(coursecode + "," + courseName);
+		
+		/*if (analysis.equals("1")) {
 			Utils.writeAFile(linesToBeSaved, resultPath);
 		}
 		
 		if (analysis.equals("2")) {
-			Utils.writeAFile(Rate, resultPath);
-		}
-	}
-	
-	private ArrayList<String> RateOfCourse(HashMap<String, Student> students) {
-		ArrayList<String> result = new ArrayList<String>();
-		result.add("Year, Semester, CourseCode, CourseName, TotalStudents, CourseTakenStudents, Rate");
+			Utils.writeAFile(RateOfCourse, resultPath);
+		}*/
 		
-		
-		return result;
-	}
-
-	private HashMap<String, Integer> getCourseTakenStudents(HashMap<String, Student> students) {
-		HashMap<String, Integer> HashMapOut = new HashMap<String, Integer>();
-		
-		
-		return HashMapOut;
-	}
-
-	private HashMap<String, Integer> getTotalStudents(HashMap<String, Student> students) {
-		HashMap<String, Integer> HashMapOut = new HashMap<String, Integer>();
-		
-		
-		return HashMapOut;
+		//System.out.println(linesToBeSaved.get(15));
+		// Write a file (named like the value of resultPath) with linesTobeSaved.
+		Utils.writeAFile(linesToBeSaved, resultPath);
 	}
 
 	/**
@@ -139,9 +134,9 @@ public class HGUCoursePatternAnalyzer extends Exception{
 	         Student info = new Student(data.getStudentId());
 	         
 	         if(HashMapOut.containsKey(info.getStudentId())) {
-	        	 HashMapOut.get(info.getStudentId()).addCourse(data);
+	        	 HashMapOut.get(info.getStudentId()).addCourse(data,startyear,endyear);
 	         }else {
-	            info.addCourse(data);
+	            info.addCourse(data,startyear,endyear);
 	            HashMapOut.put(info.getStudentId(),info);
 	         }
 	      }
@@ -185,6 +180,88 @@ public class HGUCoursePatternAnalyzer extends Exception{
 			}
 		}
 
+		return result;
+	}
+	
+	private HashMap<String, Integer> getCourseTakenStudents(Map<String, Student> students) {
+		HashMap<String, Integer> HashMapOut = new HashMap<String, Integer>();
+		
+	    	/*for(Course data:students.coursesTaken){
+	    	String key = (data.getYearTaken() + "-" + data.getSemesterCourseTaken());
+
+		    if(semestersByYearAndSemester.containsKey(key)) {
+		    }else {
+		    	semestersByYearAndSemester.put(key, count++);
+		    }
+		}*/
+	    /*
+		for(CSVRecord line:csvParser) {
+			Course data = new Course(line);
+			String courseCode = 
+			Integer num = new data.getStudentId();
+			
+			if(HashMapOut.containsKey(info.getStudentId())) {
+				HashMapOut.get(info.getStudentId()).addCourse(data);
+				}
+			else {
+				info.addCourse(data);
+				HashMapOut.put(info.getStudentId(),info);
+				}
+			}*/
+		
+		return HashMapOut;
+	}
+
+	private HashMap<String, Integer> getTotalStudents(Map<String, Student> students) {
+		HashMap<String, Integer> HashMapOut = new HashMap<String, Integer>();
+		int TotalStudents = 0;
+		/*
+		while(students != NULL) {
+			Course data = new Course(null);
+			String key = (data.getYearTaken() + "-" + data.getSemesterCourseTaken());
+			Integer count = 0;
+			
+			String[] splitYearSemester = (key.split("-"));
+			int year = Integer.parseInt(splitYearSemester[0].trim());
+			int semesterOfYear = Integer.parseInt(splitYearSemester[1].trim());
+			
+		    if(HashMapOut.containsKey(key) && year == Integer.parseInt(startyear) && year <= Integer.parseInt(endyear)) {
+		    	TotalStudents++;
+		    }else {
+		    	HashMapOut.put(key, TotalStudents=0);
+		    }
+		}*/
+		
+		return HashMapOut;
+	}
+	
+	private ArrayList<String> RateOfCourse(Map<String, Student> sortedStudents) {
+		ArrayList<String> result = new ArrayList<String>();
+		
+		for(String key: sortedStudents.keySet()) {
+			sortedStudents.get(key).getSemestersByYearAndSemester();
+		}
+		result.add("Year, Semester, CourseCode, CourseName, TotalStudents, StudentsTaken, Rate");
+		
+		String line = null;
+		/*
+		for(String key:sortedStudents.keySet()) {
+			//System.out.println(sortedStudents.get(key).getStudentId());
+			for(String list:sortedStudents.get(key).getSortedSemesterByYearAndSemester().keySet()) {
+				String Year = sortedStudents.get(key).getStudentId();
+				String Semester = String.valueOf(sortedStudents.get(key).getTotalNumberOfSemesterRegistered());
+				String CourseCode = coursecode;
+				String CourseName = courseName;
+				int TotalStudents = getTotalStudents(students).get(key);
+				int StudentsTaken = getCourseTakenStudents(students).get(key);
+				int Rate = StudentsTaken/TotalStudents;
+				
+				line = Year + "," + Semester + "," + CourseCode + "," + CourseName + "," + TotalStudents + "," + StudentsTaken + "," + Rate;
+				
+				result.add(line);
+			}
+		}*/
+		
 		return result;
 	}
 	

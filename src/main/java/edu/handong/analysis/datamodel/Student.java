@@ -9,22 +9,26 @@ public class Student {
 	private Integer count=1; //counting for total semester
 	private String studentId;
 	private ArrayList<Course> coursesTaken; // List of courses student has taken
-	private HashMap<String,Integer> semestersByYearAndSemester; //key: Year-Semester
-    // e.g., 2003-1
+	private HashMap<String,Integer> semestersByYearAndSemester; //key: Year-Semester // e.g., 2003-1
 	
 	public Student(String studentId) { // Constructor
 		this.coursesTaken = new ArrayList<Course>();
 		this.studentId = studentId;
 		this.semestersByYearAndSemester = new HashMap<String, Integer>();
+		//this.courseName = ;
 	   }
 	
-	public void addCourse(Course newRecord){
-		coursesTaken.add(newRecord);
+	public void addCourse(Course newRecord, String startyear, String endyear){
+		int start = Integer.parseInt(startyear);
+		int end = Integer.parseInt(endyear);
+		int current = newRecord.getYearTaken();
+		
+		if (current >= start && current <= end) {
+			coursesTaken.add(newRecord);
+		}
 	}
 	
 	public HashMap<String, Integer> getSemestersByYearAndSemester() {
-		/*Iterator studentIter = semestersByYearAndSemester.keySet().iterator();*/
-		//int count = 0;
 	    for(Course data:coursesTaken){
 	    	String key = (data.getYearTaken() + "-" + data.getSemesterCourseTaken());
 
