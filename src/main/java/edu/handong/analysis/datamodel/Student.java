@@ -15,7 +15,6 @@ public class Student {
 		this.coursesTaken = new ArrayList<Course>();
 		this.studentId = studentId;
 		this.semestersByYearAndSemester = new HashMap<String, Integer>();
-		//this.courseName = ;
 	   }
 	
 	public void addCourse(Course newRecord, String startyear, String endyear){

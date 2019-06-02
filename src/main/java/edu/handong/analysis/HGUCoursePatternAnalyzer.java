@@ -89,7 +89,7 @@ public class HGUCoursePatternAnalyzer extends Exception{
 		totalStudents = getTotalStudents(sortedStudents);
 		
 		HashMap<String, Integer> CourseTakenStudents = new HashMap<String, Integer>();
-		CourseTakenStudents = getCourseTakenStudents(sortedStudents);
+		CourseTakenStudents = getCourseTakenStudents(sortedStudents, coursecode);
 		
 		//ArrayList<String> Rate = new ArrayList<String>();
 		ArrayList<String> Rate = RateOfCourse(students);
@@ -183,55 +183,46 @@ public class HGUCoursePatternAnalyzer extends Exception{
 		return result;
 	}
 	
-	private HashMap<String, Integer> getCourseTakenStudents(Map<String, Student> students) {
+	private HashMap<String, Integer> getCourseTakenStudents(Map<String, Student> students, String coursecode) {
 		HashMap<String, Integer> HashMapOut = new HashMap<String, Integer>();
-		
-	    	/*for(Course data:students.coursesTaken){
-	    	String key = (data.getYearTaken() + "-" + data.getSemesterCourseTaken());
 
-		    if(semestersByYearAndSemester.containsKey(key)) {
-		    }else {
-		    	semestersByYearAndSemester.put(key, count++);
-		    }
-		}*/
-	    /*
-		for(CSVRecord line:csvParser) {
-			Course data = new Course(line);
-			String courseCode = 
-			Integer num = new data.getStudentId();
+		int CourseTaken = 0;
+		//String key = (((Course) students).getYearTaken() + "-" + ((Course) students).getSemesterCourseTaken());
 			
-			if(HashMapOut.containsKey(info.getStudentId())) {
-				HashMapOut.get(info.getStudentId()).addCourse(data);
-				}
-			else {
-				info.addCourse(data);
-				HashMapOut.put(info.getStudentId(),info);
-				}
-			}*/
-		
+		for(String key:HashMapOut.keySet()) {
+			//String[] splitYearSemester = (key.split("-"));
+			//int year = Integer.parseInt(splitYearSemester[0].trim());
+			//int semesterOfYear = Integer.parseInt(splitYearSemester[1].trim());
+			String code = ((Course) students).getCourseCode();
+			
+		    if(HashMapOut.containsKey(key) && code == coursecode) {
+		    	CourseTaken++;
+		    }else {
+		    	HashMapOut.put(key, CourseTaken=0);
+		    }
+		    System.out.println(HashMapOut);
+		}
 		return HashMapOut;
 	}
 
 	private HashMap<String, Integer> getTotalStudents(Map<String, Student> students) {
 		HashMap<String, Integer> HashMapOut = new HashMap<String, Integer>();
+
 		int TotalStudents = 0;
-		/*
-		while(students != NULL) {
-			Course data = new Course(null);
-			String key = (data.getYearTaken() + "-" + data.getSemesterCourseTaken());
-			Integer count = 0;
+		//String key = (((Course) students).getYearTaken() + "-" + ((Course) students).getSemesterCourseTaken());
 			
+		for(String key:HashMapOut.keySet()) {
 			String[] splitYearSemester = (key.split("-"));
 			int year = Integer.parseInt(splitYearSemester[0].trim());
 			int semesterOfYear = Integer.parseInt(splitYearSemester[1].trim());
 			
-		    if(HashMapOut.containsKey(key) && year == Integer.parseInt(startyear) && year <= Integer.parseInt(endyear)) {
+		    if(HashMapOut.containsKey(key)) {
 		    	TotalStudents++;
 		    }else {
 		    	HashMapOut.put(key, TotalStudents=0);
 		    }
-		}*/
-		
+		    System.out.println(HashMapOut);
+		}
 		return HashMapOut;
 	}
 	
@@ -244,25 +235,32 @@ public class HGUCoursePatternAnalyzer extends Exception{
 		result.add("Year, Semester, CourseCode, CourseName, TotalStudents, StudentsTaken, Rate");
 		
 		String line = null;
-		/*
-		for(String key:sortedStudents.keySet()) {
+		
+		//for(String key:sortedStudents.keySet()) {
+		for(int i= Integer.parseInt(startyear); i<=Integer.parseInt(endyear); i++) {
 			//System.out.println(sortedStudents.get(key).getStudentId());
-			for(String list:sortedStudents.get(key).getSortedSemesterByYearAndSemester().keySet()) {
-				String Year = sortedStudents.get(key).getStudentId();
-				String Semester = String.valueOf(sortedStudents.get(key).getTotalNumberOfSemesterRegistered());
+			//for(String list:sortedStudents.get(key).getSortedSemesterByYearAndSemester().keySet()) {
+			for(int j=1; j<5; j++) {
+				String Year = String.valueOf(i); //sortedStudents.get(key).getYearTaken();
+				String Semester = String.valueOf(j); //String.valueOf(sortedStudents.get(key).getSemesterCourseTaken());
 				String CourseCode = coursecode;
-				String CourseName = courseName;
-				int TotalStudents = getTotalStudents(students).get(key);
-				int StudentsTaken = getCourseTakenStudents(students).get(key);
-				int Rate = StudentsTaken/TotalStudents;
+				String CourseName = getCourseName(coursecode);
+				int TotalStudents = 100; //getTotalStudents(students).get(key);
+				int StudentsTaken = 10; //getCourseTakenStudents(students, coursecode).get(key);
+				double Rate = ((double)StudentsTaken/TotalStudents)*100;
 				
-				line = Year + "," + Semester + "," + CourseCode + "," + CourseName + "," + TotalStudents + "," + StudentsTaken + "," + Rate;
+				line = Year + "," + Semester + "," + CourseCode + "," + CourseName + "," + TotalStudents + "," + StudentsTaken + "," + Rate + "%";
 				
 				result.add(line);
 			}
-		}*/
+		}
 		
 		return result;
+	}
+	
+	private String getCourseName(String coursecode) {
+		String courseName = null;
+		return courseName;
 	}
 	
 	private boolean parseOptions(Options options, String[] args) {
